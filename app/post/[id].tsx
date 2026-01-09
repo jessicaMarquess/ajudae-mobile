@@ -24,7 +24,8 @@ export default function PostDetailScreen() {
   const [deleteModalVisible, setDeleteModalVisible] = useState(false);
 
   const handleEdit = () => {
-    const canManage = !!post && user?.role === "professor" && user?.id === post.authorId;
+    const canManage =
+      !!post && user?.role === "professor" && user?.id === post.authorId;
     if (canManage) {
       router.push(`/post/edit/${post.id}`);
     } else {
@@ -33,7 +34,8 @@ export default function PostDetailScreen() {
   };
 
   const handleDelete = () => {
-    const canManage = !!post && user?.role === "professor" && user?.id === post.authorId;
+    const canManage =
+      !!post && user?.role === "professor" && user?.id === post.authorId;
     if (canManage) {
       setDeleteModalVisible(true);
     } else {
