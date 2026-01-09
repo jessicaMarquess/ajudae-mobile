@@ -7,9 +7,10 @@
     "icon": "./assets/images/icon.png",
     "scheme": "ajudaemobile",
     "userInterfaceStyle": "automatic",
-    "newArchEnabled": true,
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "jsEngine": "hermes",
+      "bundleIdentifier": "com.ajudae.mobile"
     },
     "android": {
       "adaptiveIcon": {
@@ -41,8 +42,7 @@
       ]
     ],
     "experiments": {
-      "typedRoutes": true,
-      "reactCompiler": true
+      "typedRoutes": true
     }
   }
 }
