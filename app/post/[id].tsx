@@ -5,6 +5,7 @@ import { Stack, useLocalSearchParams, useRouter } from "expo-router";
 import React, { useState } from "react";
 import {
   ActivityIndicator,
+  Alert,
   Modal,
   Pressable,
   ScrollView,
@@ -23,7 +24,8 @@ export default function PostDetailScreen() {
   const [deleteModalVisible, setDeleteModalVisible] = useState(false);
 
   const handleEdit = () => {
-    if (post && (user?.id === post.authorId || user?.role === "professor")) {
+    const canManage = !!post && user?.role === "professor" && user?.id === post.authorId;
+    if (canManage) {
       router.push(`/post/edit/${post.id}`);
     } else {
       Alert.alert("Erro", "Você não tem permissão para editar este post");
@@ -31,10 +33,11 @@ export default function PostDetailScreen() {
   };
 
   const handleDelete = () => {
-    if (post && (user?.id === post.authorId || user?.role === "professor")) {
+    const canManage = !!post && user?.role === "professor" && user?.id === post.authorId;
+    if (canManage) {
       setDeleteModalVisible(true);
     } else {
-      Modal.alert("Erro", "Você não tem permissão para deletar este post");
+      Alert.alert("Erro", "Você não tem permissão para deletar este post");
     }
   };
 
@@ -74,7 +77,7 @@ export default function PostDetailScreen() {
     );
   }
 
-  const isAuthor = user?.id === post.authorId || user?.role === "professor";
+  const canManage = user?.role === "professor" && user?.id === post.authorId;
 
   return (
     <>
@@ -107,12 +110,10 @@ export default function PostDetailScreen() {
         </View>
 
         <View style={styles.content}>
-          <Text style={styles.content}>{post.content}</Text>
-          <View style={styles.divider} />
-          <Text style={styles.fullContent}>{post.content}</Text>
+          <Text style={styles.description}>{post.content}</Text>
         </View>
 
-        {isAuthor && (
+        {canManage && (
           <View style={styles.actions}>
             <TouchableOpacity style={styles.editButton} onPress={handleEdit}>
               <Text style={styles.editButtonText}>Editar</Text>

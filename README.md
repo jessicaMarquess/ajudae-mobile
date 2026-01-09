@@ -134,4 +134,5 @@ O script `npm run reset-project` move o código atual para `app-example/` e recr
 ---
 
 Feito com Expo, React Native e React Query.
+
 # ajudae-mobile

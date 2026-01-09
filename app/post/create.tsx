@@ -128,7 +128,7 @@ const styles = StyleSheet.create({
     paddingTop: 12,
     paddingBottom: 12,
     borderBottomWidth: 1,
-    borderBottomColor: "#e0e0e0",
+    borderBottomColor: "#e8ddd0",
   },
   backButton: {
     width: 40,
@@ -139,7 +139,7 @@ const styles = StyleSheet.create({
   headerTitle: {
     fontSize: 18,
     fontWeight: "600",
-    color: "#333",
+    color: "#4a3f35",
   },
   scrollView: {
     flex: 1,
@@ -151,6 +151,8 @@ const styles = StyleSheet.create({
     backgroundColor: "#fff",
     borderRadius: 12,
     padding: 16,
+    borderWidth: 1,
+    borderColor: "#e8ddd0",
   },
   formGroup: {
     marginBottom: 16,
@@ -158,17 +160,18 @@ const styles = StyleSheet.create({
   label: {
     fontSize: 14,
     fontWeight: "600",
-    color: "#333",
+    color: "#4a3f35",
     marginBottom: 8,
   },
   input: {
-    borderWidth: 1,
-    borderColor: "#ddd",
-    borderRadius: 8,
+    borderWidth: 1.5,
+    borderColor: "#d4c9b8",
+    borderRadius: 12,
     paddingHorizontal: 12,
     paddingVertical: 10,
     fontSize: 14,
-    color: "#333",
+    color: "#4a3f35",
+    backgroundColor: "#fefdfb",
   },
   textArea: {
     minHeight: 80,

@@ -1,5 +1,4 @@
 import { useAuth } from "@/src/contexts/AuthContext";
-import { useDebounce } from "@/src/hooks/useDebounce";
 import { useDeleteStudent, useGetStudents } from "@/src/hooks/useQueries";
 import { MaterialIcons } from "@expo/vector-icons";
 import { useRouter } from "expo-router";
@@ -12,7 +11,6 @@ import {
   RefreshControl,
   StyleSheet,
   Text,
-  TextInput,
   TouchableOpacity,
   View,
 } from "react-native";
@@ -21,15 +19,12 @@ export default function StudentsListScreen() {
   const router = useRouter();
   const { logout, user } = useAuth();
   const [currentPage, setCurrentPage] = useState(1);
-  const [searchText, setSearchText] = useState("");
   const [menuVisible, setMenuVisible] = useState(false);
   const [deleteModalVisible, setDeleteModalVisible] = useState(false);
   const [selectedDeleteId, setSelectedDeleteId] = useState<string | null>(null);
-  const debouncedSearch = useDebounce(searchText, 300);
   const { data, isLoading, refetch, isFetching } = useGetStudents(
     currentPage,
-    10,
-    debouncedSearch || undefined
+    10
   );
   const deleteStudentMutation = useDeleteStudent();
 
@@ -147,16 +142,6 @@ export default function StudentsListScreen() {
         </View>
       )}
 
-      <View style={styles.searchContainer}>
-        <TextInput
-          style={styles.searchInput}
-          placeholder="Buscar estudantes..."
-          value={searchText}
-          onChangeText={setSearchText}
-          placeholderTextColor="#999"
-        />
-      </View>
-
       <FlatList
         data={data?.data || []}
         renderItem={renderStudentItem}
@@ -165,16 +150,8 @@ export default function StudentsListScreen() {
         refreshControl={
           <RefreshControl refreshing={false} onRefresh={() => refetch()} />
         }
-        ListHeaderComponent={
-          isFetching ? (
-            <View style={styles.searchLoadingContainer}>
-              <ActivityIndicator size="small" color="#007AFF" />
-              <Text style={styles.searchLoadingText}>Buscando...</Text>
-            </View>
-          ) : null
-        }
         ListEmptyComponent={
-          !isFetching ? (
+          !isLoading ? (
             <View style={styles.emptyContainer}>
               <Text style={styles.emptyText}>Nenhum estudante encontrado</Text>
             </View>
@@ -290,20 +267,6 @@ const styles = StyleSheet.create({
     backgroundColor: "#e8ddd0",
     marginVertical: 8,
   },
-  searchContainer: {
-    padding: 12,
-    backgroundColor: "#fff",
-    marginBottom: 8,
-  },
-  searchInput: {
-    borderWidth: 1.5,
-    borderColor: "#d4c9b8",
-    borderRadius: 12,
-    paddingHorizontal: 12,
-    paddingVertical: 10,
-    fontSize: 14,
-    backgroundColor: "#fefdfb",
-  },
   listContent: {
     padding: 12,
   },
@@ -397,20 +360,7 @@ const styles = StyleSheet.create({
     color: "#8b7355",
     marginTop: 12,
   },
-  searchLoadingContainer: {
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "center",
-    paddingVertical: 16,
-    backgroundColor: "#fefdfb",
-    borderBottomWidth: 1,
-    borderBottomColor: "#e8ddd0",
-  },
-  searchLoadingText: {
-    fontSize: 13,
-    color: "#8b7355",
-    marginLeft: 8,
-  },
+
   createButton: {
     position: "absolute",
     bottom: 20,
