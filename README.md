@@ -1,50 +1,137 @@
-# Welcome to your Expo app 👋
+# Ajudaé Mobile
 
-This is an [Expo](https://expo.dev) project created with [`create-expo-app`](https://www.npmjs.com/package/create-expo-app).
+Aplicativo mobile em Expo/React Native para a plataforma Ajudaé, com fluxo de autenticação, gerenciamento de posts e área administrativa para professores e estudantes.
 
-## Get started
+## Sumário
 
-1. Install dependencies
+- Visão geral
+- Requisitos
+- Configuração rápida
+- Variáveis de ambiente
+- Scripts disponíveis
+- Estrutura do projeto
+- Integração com API
+- Mapa de navegação
+- Dicas de desenvolvimento
+
+---
+
+## Visão geral
+
+Este projeto usa Expo Router (file-based routing) e `axios` para comunicação com a API. Tokens de autenticação são armazenados via `expo-secure-store` com renovação automática de `access_token` usando `refresh_token`.
+
+## Requisitos
+
+- Node.js LTS e npm
+- Expo CLI (opcional, pode usar `npx expo`)
+- Android Studio (emulador Android) ou Xcode (simulador iOS)
+
+## Configuração rápida
+
+1. Instale dependências
 
    ```bash
    npm install
    ```
 
-2. Start the app
+2. Configure a URL da API (opcional, padrão: `http://localhost:3000`)
 
    ```bash
-   npx expo start
+   # Linux/macOS (temporário para a sessão)
+   export REACT_APP_API_URL="http://localhost:3000"
+
+   # Emulador Android acessando API local do host
+   # Use 10.0.2.2 em vez de localhost
+   export REACT_APP_API_URL="http://10.0.2.2:3000"
    ```
 
-In the output, you'll find options to open the app in a
+3. Inicie o app
 
-- [development build](https://docs.expo.dev/develop/development-builds/introduction/)
-- [Android emulator](https://docs.expo.dev/workflow/android-studio-emulator/)
-- [iOS simulator](https://docs.expo.dev/workflow/ios-simulator/)
-- [Expo Go](https://expo.dev/go), a limited sandbox for trying out app development with Expo
+   ```bash
+   npm run start
+   ```
 
-You can start developing by editing the files inside the **app** directory. This project uses [file-based routing](https://docs.expo.dev/router/introduction).
+   Opções úteis:
 
-## Get a fresh project
+   ```bash
+   npm run android       # abre no emulador Android
+   npm run ios           # abre no simulador iOS
+   npm run web           # abre no navegador
+   npm run start:tunnel  # túnel para dispositivos reais
+   ```
 
-When you're ready, run:
+## Variáveis de ambiente
+
+Gerenciadas em `src/config/env.ts`.
+
+- `REACT_APP_API_URL`: base da API (ex.: `http://localhost:3000`). Se não definido, usa `http://localhost:3000`.
+- `NODE_ENV`: `development` (padrão) ou `production`.
+- `DEBUG`: se `true`, ativa logs extras.
+
+Defina no shell antes de iniciar o Metro bundler:
 
 ```bash
-npm run reset-project
+export REACT_APP_API_URL="http://10.0.2.2:3000"  # Android emulador
+export NODE_ENV=development
+export DEBUG=true
 ```
 
-This command will move the starter code to the **app-example** directory and create a blank **app** directory where you can start developing.
+> Dica: ao usar dispositivo físico, garanta que o backend esteja acessível na rede (IP da máquina ou túnel).
 
-## Learn more
+## Scripts disponíveis
 
-To learn more about developing your project with Expo, look at the following resources:
+```bash
+npm run start         # inicia o servidor do Expo
+npm run start:tunnel  # inicia com túnel
+npm run start:lan     # inicia em rede local
+npm run android       # abre no emulador Android
+npm run android:tunnel
+npm run ios           # abre no simulador iOS
+npm run ios:tunnel
+npm run web
+npm run lint          # executa ESLint
+npm run reset-project # reseta o projeto (script auxiliar)
+```
 
-- [Expo documentation](https://docs.expo.dev/): Learn fundamentals, or go into advanced topics with our [guides](https://docs.expo.dev/guides).
-- [Learn Expo tutorial](https://docs.expo.dev/tutorial/introduction/): Follow a step-by-step tutorial where you'll create a project that runs on Android, iOS, and the web.
+## Estrutura do projeto
 
-## Join the community
+Principais diretórios:
 
-Join our community of developers creating universal apps.
+- `app/`: páginas e navegação com Expo Router (stacks, tabs, admin, auth, posts).
+- `src/services/`: cliente HTTP e serviços (`api.ts`, `posts.ts`, `students.ts`, `teachers.ts`).
+- `src/contexts/`: contexto de autenticação.
+- `components/`: componentes reutilizáveis.
+- `constants/`: tema e constantes.
 
-- [Expo on GitHub](https://github.com/expo/expo): View our open source platform and contribute.
-- [Discord community](https://chat.expo.dev): Chat with Expo users and ask questions.
+Veja o mapa completo em `MAPA_NAVEGACAO.md`.
+
+## Integração com API
+
+- Base da API: configurável via `REACT_APP_API_URL`. Padrão: `http://localhost:3000`.
+- Autenticação: JWT Bearer automático via interceptador (token no `SecureStore`).
+- Renovação: 401 dispara `POST /auth/refresh` (se houver `refresh_token`).
+- Exemplos de endpoints usados no app:
+  - `GET /posts`, `POST /posts`, `PATCH /posts/:id`, `DELETE /posts/:id`
+  - `GET /users`, `GET /users/professores`, `GET /users/alunos`, `POST /users`, `PATCH /users/:id`, `DELETE /users/:id`
+
+Detalhes e exemplos estão em `ENDPOINTS.md`.
+
+## Mapa de navegação
+
+Fluxos completos (auth, tabs, admin e posts) com diagrama: `MAPA_NAVEGACAO.md`.
+
+## Dicas de desenvolvimento
+
+- Android emulador acessando `localhost`: use `http://10.0.2.2:3000`.
+- Dispositivo físico: use `npm run start:tunnel` e exponha o backend (túnel ou IP acessível).
+- Tokens: armazenados em `expo-secure-store`; em alguns ambientes, o armazenamento seguro pode falhar — o app mantém token em memória como fallback.
+- Lint: `npm run lint` para manter o estilo consistente.
+
+## Reset do projeto (opcional)
+
+O script `npm run reset-project` move o código atual para `app-example/` e recria uma base mínima em `app/`. Use apenas se quiser começar do zero.
+
+---
+
+Feito com Expo, React Native e React Query.
+# ajudae-mobile
