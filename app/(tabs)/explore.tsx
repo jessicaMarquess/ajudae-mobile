@@ -83,7 +83,9 @@ export default function AdminMenuScreen() {
               />
               <View style={styles.cardContent}>
                 <Text style={styles.cardTitle}>{section.title}</Text>
-                <Text style={styles.cardDescription}>{section.description}</Text>
+                <Text style={styles.cardDescription}>
+                  {section.description}
+                </Text>
               </View>
             </TouchableOpacity>
           ))}
